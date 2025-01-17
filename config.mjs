@@ -1,7 +1,7 @@
 export default [
   {
     // 文件名称
-    name: "Skyblock",
+    name: "compressed",
     // 缩略图
     pic: "https://skyblock.hypixel.net/",
     // 文章标题

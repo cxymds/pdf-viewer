@@ -50,7 +50,14 @@
 /************************************************************************/
 var __webpack_exports__ = {}
 import articles from "./config.mjs"
-console.log(articles)
+// 从url参数中获取文章名称
+const urlParams = new URLSearchParams(window.location.search)
+console.log("🚀 ~ window.location:", window.location.search)
+console.log(urlParams)
+
+const artilectName = "pdf-compressed.tracemonkey-pldi-09.pdf"
+// compressed.tracemonkey-pldi-09.pdf
+const article = articles.find((item) => (item.name = artilectName))
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {

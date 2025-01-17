@@ -5832,6 +5832,7 @@ body {
   color: #012b35;
 }
 #nextFile .title {
+  margin: 10px 5px;
   color: #012b35;
   font-weight: 600;
   overflow: hidden;
@@ -5841,11 +5842,12 @@ body {
   -webkit-box-orient: vertical;
 }
 #nextFile .art-content {
+  margin: 0px 5px;
   color: #012b35;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 3; /* 限制行数为2行 */
+  -webkit-line-clamp: 4; /* 限制行数为2行 */
   -webkit-box-orient: vertical;
 }
 #nextFile.show {
