@@ -5857,3 +5857,9 @@ body {
   bottom: 0;
   right: 0;
 }
+/* 媒体查询像素小于768px时 */
+@media screen and (max-width: 768px) {
+  .container-box {
+    display: none;
+  }
+}
