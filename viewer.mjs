@@ -50,15 +50,6 @@
 /************************************************************************/
 var __webpack_exports__ = {}
 import articles from "./config.mjs"
-// 从url参数中获取文章名称
-const urlParams = new URLSearchParams(window.location.search)
-console.log("🚀 ~ window.location:", window.location.search)
-console.log(urlParams)
-
-const artilectName = "pdf-compressed.tracemonkey-pldi-09.pdf"
-// compressed.tracemonkey-pldi-09.pdf
-const article = articles.find((item) => (item.name = artilectName))
-
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
   PDFViewerApplication: () => /* reexport */ PDFViewerApplication,
@@ -842,7 +833,7 @@ const defaultOptions = {
 }
 {
   defaultOptions.defaultUrl = {
-    value: "compressed.tracemonkey-pldi-09.pdf",
+    value: articles[0].url,
     kind: OptionKind.VIEWER,
   }
   defaultOptions.sandboxBundleSrc = {
@@ -13327,12 +13318,14 @@ const PDFViewerApplication = {
   },
   async run(config) {
     await this.initialize(config)
+
     const { appConfig, eventBus } = this
     let file
     const queryString = document.location.search.substring(1)
     const params = parseQueryString(queryString)
     file = params.get("file") ?? AppOptions.get("defaultUrl")
-    validateFileURL(file)
+
+    // validateFileURL(file) // TODO: 不使用域名检测
     const fileInput = (this._openFileInput = document.createElement("input"))
     fileInput.id = "fileInput"
     fileInput.hidden = true
@@ -14370,13 +14363,14 @@ initCom(PDFViewerApplication)
   PDFPrintServiceFactory.initGlobals(PDFViewerApplication)
 }
 {
-  const HOSTED_VIEWER_ORIGINS = ["null", "http://mozilla.github.io", "https://mozilla.github.io"]
+  const HOSTED_VIEWER_ORIGINS = ["null", "https://mozilla.github.io"]
   var validateFileURL = function (file) {
     if (!file) {
       return
     }
     try {
       const viewerOrigin = new URL(window.location.href).origin || "null"
+      console.log("🚀 ~ validateFileURL ~ viewerOrigin:", viewerOrigin)
       if (HOSTED_VIEWER_ORIGINS.includes(viewerOrigin)) {
         return
       }
@@ -15142,6 +15136,7 @@ function webViewerLoad() {
   }
   PDFViewerApplication.run(config)
 }
+
 document.blockUnblockOnload?.(true)
 if (document.readyState === "interactive" || document.readyState === "complete") {
   webViewerLoad()

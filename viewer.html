@@ -39,56 +39,12 @@ See https://github.com/adobe-type-tools/cmap-resources
 
   <body tabindex="0">
     <!-- 左侧侧边栏 -->
-    <div class="container-box">
+    <div class="container-box" id="container-box">
       <a href="javascript:;" target="_blank" id="download-button">
         <svg style="vertical-align: sub" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
           <path fill="#ffffff" d="M3 19h18v2H3zM13 9h7l-8 8l-8-8h7V1h2z" />
         </svg>
         Download
-      </a>
-      <a href="" class="item">
-        <div class="item-pic">
-          <img
-            src="https://cdn.pathfactory.com/assets/10903/contents/613607/thumbnails/600x/pexels-christopher-becke-2792670-2-1.jpg"
-            alt="" />
-        </div>
-        <div class="item-desc">
-          ologies are driving modern data-intensive workloads to not only conduct historical data analytics but also
-          perform real time analytics to drive immediate decision-making. Real time analytics use cases include fraud
-          detection, trade surveillance, cus
-        </div>
-      </a>
-      <a href="" class="item nowIndex">
-        <div class="item-pic">
-          <img
-            src="https://cdn.pathfactory.com/assets/10903/contents/613607/thumbnails/600x/pexels-christopher-becke-2792670-2-1.jpg"
-            alt="" />
-        </div>
-        <div class="item-desc">trade surveillance, cus</div>
-      </a>
-      <a href="" class="item">
-        <div class="item-pic">
-          <img
-            src="https://cdn.pathfactory.com/assets/10903/contents/613607/thumbnails/600x/pexels-christopher-becke-2792670-2-1.jpg"
-            alt="" />
-        </div>
-        <div class="item-desc">trade surveillance, cus</div>
-      </a>
-      <a href="" class="item">
-        <div class="item-pic">
-          <img
-            src="https://cdn.pathfactory.com/assets/10903/contents/613607/thumbnails/600x/pexels-christopher-becke-2792670-2-1.jpg"
-            alt="" />
-        </div>
-        <div class="item-desc">trade surveillance, cus</div>
-      </a>
-      <a href="" class="item">
-        <div class="item-pic">
-          <img
-            src="https://cdn.pathfactory.com/assets/10903/contents/613607/thumbnails/600x/pexels-christopher-becke-2792670-2-1.jpg"
-            alt="" />
-        </div>
-        <div class="item-desc">trade surveillance, cus</div>
       </a>
     </div>
     <!-- pdf查看器 -->
@@ -1343,16 +1299,7 @@ See https://github.com/adobe-type-tools/cmap-resources
 
     <!-- 右下方 -->
     <a id="nextView" href="javascript:;">Next</a>
-    <a href="" id="nextFile">
-      <img src="https://cdn.pathfactory.com/assets/10903/contents/387730/thumbnails/600x/hadoop-logo.png" alt="" />
-      <p class="title">Trace-based Just-in-Time Type Specialization for Dynamic Languages</p>
-      <p class="art-content">
-        Dynamic languages such as JavaScript are more difficult to com- pile than statically typed ones. Since no
-        concrete type information is available, traditional compilers need to emit generic code that can handle all
-        possible type combinations at runtime. We present an al- ternative compilation technique for dynamically-typed
-        languages that identifies frequently executed loop t
-      </p>
-    </a>
+    <a href="" id="nextFile"></a>
   </body>
   <script>
     // 底部动画
@@ -1365,5 +1312,75 @@ See https://github.com/adobe-type-tools/cmap-resources
     nextFile.addEventListener("mouseleave", function () {
       nextFile.classList.remove("show")
     })
+  </script>
+  <script type="module">
+    import articles from "./config.mjs"
+
+    // 从url参数中获取文章名称
+    const urlParams = new URLSearchParams(window.location.search)
+    const file = urlParams.get("file") || articles[0].url
+
+    // 更具file参数获取文章对象信息，默认使用第一个
+    let fileIndex = 0
+    const article =
+      articles.find((item, index) => {
+        if (normalizeUrl(item.url) == normalizeUrl(file)) {
+          fileIndex = index
+          return true
+        }
+        return false
+      }) || articles[0]
+
+    randerArticleList(articles, fileIndex)
+    randerNextBtn(articles, fileIndex)
+
+    function normalizeUrl(url) {
+      // 解码 URL
+      const decodedUrl = decodeURIComponent(url)
+      // 标准化路径（可以根据需要进一步处理）
+      return decodedUrl.replace(/\/+/g, "/") // 替换多个斜杠为一个
+    }
+
+    function randerArticleList(article) {
+      let htmlList = ""
+      articles.forEach((element, index) => {
+        let className = "item" + (index == fileIndex ? " nowIndex" : "")
+        htmlList += `
+          <a href="?file=${element.url}" class="${className}">
+            <div class="item-pic">
+              <img
+                src="${element.pic}"
+                alt="" />
+            </div>
+            <div class="item-desc">
+            ${element.desc}
+            </div>
+          </a>
+          `
+      })
+
+      const listContainer = document.getElementById("container-box")
+      listContainer.innerHTML += htmlList
+    }
+    function randerNextBtn(articleList, fileIndex) {
+      // 下一篇文章的索引
+      const nextIndex = fileIndex < articleList.length - 1 ? fileIndex + 1 : 0
+
+      const nextView = document.getElementById("nextView")
+      const nextFile = document.getElementById("nextFile")
+
+      if (fileIndex < articleList.length - 1) {
+        nextFile.href = `?file=${articleList[nextIndex].url}`
+        nextFile.innerHTML = `
+       <img src="${articleList[nextIndex].pic}" alt="" />
+      <p class="title">${articleList[nextIndex].title}</p>
+      <p class="art-content">
+        ${articleList[nextIndex].desc}
+      </p>
+      `
+      } else {
+        nextView.style.display = "none"
+      }
+    }
   </script>
 </html>
